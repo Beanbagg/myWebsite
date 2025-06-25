@@ -24,8 +24,8 @@ body {
 #sideMenu {
   position: fixed;
   top: 0;
-  right: -300px;
-  width: 300px;
+  right: -250px;
+  width: 250px;
   height: 100%;
   background: #222;
   color: whitesmoke;

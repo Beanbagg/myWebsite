@@ -39,17 +39,15 @@ document.addEventListener("DOMContentLoaded", () => {
           <button id="logoutBtn" style="background: none; border: none; color: crimson; cursor: pointer;">Logout</button>
         </div>
       `;
-    document.getElementById("logoutBtn").addEventListener("click", () => {
-  localStorage.removeItem("isLoggedIn");
-
-  const path = window.location.pathname.toLowerCase();
-
-  if (path.endsWith('downloads.html') || path.endsWith('recipes.html')) {
-    window.location.href = "index.html";
-  } else {
-    location.reload();
-  }
-});
+      document.getElementById("logoutBtn").addEventListener("click", () => {
+        localStorage.removeItem("isLoggedIn");
+        const path = window.location.pathname.toLowerCase();
+        if (path.endsWith('downloads.html') || path.endsWith('recipes.html')) {
+          window.location.href = "index.html";
+        } else {
+          location.reload();
+        }
+      });
     } else {
       authMenu.innerHTML = `
         <div class="menu-header">
@@ -65,6 +63,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const filter = this.value.toLowerCase();
 
     document.querySelectorAll(".menu-item").forEach(menuItem => {
+      const requiresLogin = menuItem.classList.contains("requires-login");
+      if (requiresLogin && !isLoggedIn) {
+        menuItem.style.display = "none";
+        return; // skip filtering this item entirely
+      }
+
       const headerLink = menuItem.querySelector(".menu-header a");
       const headerText = headerLink ? headerLink.textContent.toLowerCase() : "";
       const submenu = menuItem.querySelector(".submenu");
@@ -72,9 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const submenuLinks = submenu ? submenu.querySelectorAll("li") : [];
 
       if (!filter) {
- 
         menuItem.style.display = "block";
-
         submenuLinks.forEach(li => {
           li.style.display = "block";
         });
